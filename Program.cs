@@ -12,7 +12,7 @@ namespace myproject
 
             string fname = "";
             string lname = "";
-            Console.Write("Enter the first name: ");
+            Console.Write("Enter the name: ");
             fname = Console.ReadLine();
             //Console.Write("Enter the second name: ");
             //lname = Console.ReadLine();
@@ -22,48 +22,40 @@ namespace myproject
 
         static void calculateMatch(string firstname, string secondname)
         {
+            //create temp string
             string temporary = firstname;
-            var indicesToBeRemoved = new ArrayList();
 
-            //iterate through the string for each char in string
-            for (int i = 0; i < firstname.Length - 1; i++)
+
+
+            //loop as long as string has chars
+            while (temporary.Length > 0)
             {
-                //for each char iterate through all the other chars in the word
-                for (int j = i + 1; j < firstname.Length; j++)
-                {
-                    //if char matches our char
-                    if (firstname[i] == firstname[j])
-                    {
-                        //add char indice to array
-                        indicesToBeRemoved.Add(j);
-                    }
-                }
-                //show all char indices to be removed
-                Console.WriteLine("for " + firstname[i] + "we remove: ");
-                PrintValues(indicesToBeRemoved);
-                indicesToBeRemoved.Clear();
+
+                char ch = temporary[0];
+                int frequency = temporary.Count(f => (f == ch));
+                Console.WriteLine("frequency of:" + temporary[0] + " is " + frequency);
+
+                //remove current indice
+                temporary = temporary.Replace(temporary[0].ToString(), String.Empty);
+
+                //print new word
+                Console.WriteLine("new string is :" + temporary);
+                Console.WriteLine();
+
             }
+
         }
-        //remove all similar chars at their indices
-        //for (int k = 0; k < indicesToBeRemoved.size(); k++)
-        // {
-        // temporary = temporary.Replace(indicesToBeRemoved[i].ToString(), String.Empty);
-        // }
-        // Console.WriteLine(temporary);
-        //}
-        // }
-
-
-        public static void PrintValues(IEnumerable myList)
-        {
-            foreach (Object obj in myList)
-                Console.Write("   {0}", obj);
-            Console.WriteLine();
-        }
-
-
-
 
 
     }
+
 }
+
+
+
+
+
+
+
+
+
