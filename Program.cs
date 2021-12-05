@@ -10,21 +10,30 @@ namespace myproject
 
         static void Main(string[] args)
         {
-
+            //obtain and process/handle user input
             string fname = "";
             string lname = "";
-            Console.Write("Enter the name: ");
+
+            Console.Write("Enter the first name: ");
             fname = Console.ReadLine();
-            //Console.Write("Enter the second name: ");
-            //lname = Console.ReadLine();
-            calculateMatch(fname, lname);
+            string name1= fname;
+            fname = fname.ToLower();
+           
+
+            Console.Write("Enter the second name: ");
+            lname = Console.ReadLine();
+            string name2= lname;
+            lname = lname.ToLower();
+
+            //calculate match percentage print results
+            Console.WriteLine(name1+ " matches " +name2+ " "+ calculateMatch(fname + " matches" + lname)+ "%");
 
         }
 
-        static void calculateMatch(string firstname, string secondname)
+        static string calculateMatch(string sentence)
         {
             //create temp string
-            string temp = firstname;
+            string temp = sentence;
             string temporary = String.Concat(temp.Where(c => !Char.IsWhiteSpace(c)));
             string occuranceString = "";
             string sumString = "";
@@ -51,12 +60,12 @@ namespace myproject
 
 
             }
-            Console.WriteLine("OccuranceString: " + occuranceString);
+            //Console.WriteLine("OccuranceString: " + occuranceString);
             //use occurance string to calculate 2 digit number
             sumString = produceSums(occuranceString);
 
-            Console.WriteLine("The string of sums is: " + sumString);
-            Console.WriteLine("The string of matches is: " + produceMatches(sumString));
+            //Console.WriteLine("The string of sums is: " + sumString);
+            //Console.WriteLine(name1+ " matches " +name2+ " "+ produceMatches(sumString)+ "%");
 
 
 
@@ -100,7 +109,7 @@ namespace myproject
 
             }
 
-
+            return produceMatches(sumString);
 
         }
 
