@@ -53,35 +53,59 @@ namespace myproject
             }
             Console.WriteLine("OccuranceString: " + occuranceString);
             //use occurance string to calculate 2 digit number
-            while (occuranceString.Length > 1)
+            sumString = produceSums(occuranceString);
+
+            Console.WriteLine("The string of sums is: " + sumString);
+            Console.WriteLine("The string of matches is: " + produceMatches(sumString));
+
+
+
+
+            static string produceSums(string occuranceString)
             {
+                string myString = "";
 
-                int sum = 0;
-                int left = (int)Char.GetNumericValue(occuranceString[0]);
-                int right = (int)Char.GetNumericValue(occuranceString[occuranceString.Length - 1]);
-                sum = left + right;
-                sumString = sumString + "" + sum.ToString();
-                occuranceString = occuranceString.Remove(0, 1);
-                occuranceString = occuranceString.Remove((occuranceString.Length) - 1);
-                //Console.WriteLine(sum);
-                //Console.WriteLine("sum string string is " + sumString);
-                //Console.WriteLine();
-                //Console.WriteLine("new string is " + occuranceString);
-
-                if (occuranceString.Length == 1)
+                while (occuranceString.Length > 1)
                 {
-                    sumString = sumString + "" + occuranceString;
+                    int sum = 0;
+                    int left = (int)Char.GetNumericValue(occuranceString[0]);
+                    int right = (int)Char.GetNumericValue(occuranceString[occuranceString.Length - 1]);
+                    sum = left + right;
+                    myString = myString + "" + sum.ToString();
+                    occuranceString = occuranceString.Remove(0, 1);
+                    occuranceString = occuranceString.Remove((occuranceString.Length) - 1);
 
+
+                    if (occuranceString.Length == 1)
+                    {
+                        myString = myString + "" + occuranceString;
+
+                    }
                 }
+                return myString;
             }
-            Console.WriteLine("sum string string is " + sumString);
+
+            static string produceMatches(string sumString)
+            {
+                if (sumString.Length == 2)
+                {
+                    return sumString;
+                }
+                else
+                {
+                    return produceMatches(produceSums(sumString));
+                }
+
+
+
+            }
+
+
 
         }
 
 
-
     }
-
 
 }
 
