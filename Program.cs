@@ -26,8 +26,15 @@ namespace myproject
             lname = lname.ToLower();
 
             //calculate match percentage print results
-            Console.WriteLine(name1+ " matches " +name2+ " "+ calculateMatch(fname + " matches" + lname)+ "%");
+            int percentage=Int32.Parse( calculateMatch(fname + " matches" + lname));
 
+            //check if % greater or less than 80
+            if(percentage>=80){
+                Console.WriteLine(name1+ " matches " +name2+ " "+percentage+ "%, good match");
+            }
+            else{
+                Console.WriteLine(name1+ " matches " +name2+ " "+percentage+ "%");
+            }
         }
 
         static string calculateMatch(string sentence)
