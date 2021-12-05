@@ -1,4 +1,6 @@
-﻿namespace myproject
+﻿using System;
+
+namespace myproject
 {
 
     class Program
@@ -8,12 +10,17 @@
         {
 
             string fname, lname;
-            Console.Write("Enter your firstname: ");
+            Console.Write("Enter the first name: ");
             fname = Console.ReadLine();
-            Console.Write("Enter your lastname: ");
+            Console.Write("Enter the second name: ");
             lname = Console.ReadLine();
-            Console.Write("Your fullname is " + fname + " " + lname);
+            calculateMatch(fname, lname);
 
+        }
+
+        static void calculateMatch(string firstname, string secondname)
+        {
+            Console.Write(firstname + " " + secondname);
         }
     }
 }
