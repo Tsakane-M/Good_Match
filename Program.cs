@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace myproject {
 
@@ -17,7 +19,7 @@ namespace myproject {
                 Console.WriteLine("WELCOME TO MATCH CALCULATOR");
                 Console.WriteLine("............................");
                 Console.WriteLine("CHOOSE YOUR OPTION AND PRESS ENTER!");
-                Console.WriteLine("OPTION 1: ENTER 1 TO ENTER TWO STRINGS AND GET THEIR MATCH PERCENTAGE!");
+                Console.WriteLine("OPTION 1: ENTER 1 TO ENTER TWO NAMES AND GET THEIR MATCH PERCENTAGE!");
                 Console.WriteLine("OPTION 2: ENTER 2 TO ENTER THE CSV FILENAME AND MATCH MANY NAMES!");
                 Console.WriteLine("OPTION 3: ENTER 3 TO QUIT!");
                 Console.Write(":");
@@ -44,15 +46,21 @@ namespace myproject {
                         }
                     }
 
-                    produceOutput(fname, lname);
+                    Console.WriteLine(produceOutput(fname, lname));
 
-                    
+
 
                 } else if (option == "3") {
                     System.Environment.Exit(0);
 
                 } else if (option == "2") {
-                    using(var reader = new StreamReader(@"test.csv")) {
+
+                    Console.Write("Enter the CSV filename: ");
+                    string fileName = Console.ReadLine();
+
+                    
+
+                    using(var reader = new StreamReader(fileName)) {
                         List < string > names = new List < string > ();
                         List < string > genders = new List < string > ();
 
@@ -64,18 +72,19 @@ namespace myproject {
                             names.Add(values[0]);
                             genders.Add(values[1]);
                         }
-
+                    Console.WriteLine("CSV file successfully Read!\n");
+                    Console.WriteLine("Processing Input...\n");
                         //remove dublicates
                         for (int i = 0; i < names.Count; i++) {
 
                             for (int j = i + 1; j < names.Count; j++) {
                                 if (names[i] == names[j] && genders[i] == genders[j]) {
 
-                                    
-                                   names.RemoveAt(j);
-                                   genders.RemoveAt(j);
 
-                                    
+                                    names.RemoveAt(j);
+                                    genders.RemoveAt(j);
+
+
                                 }
                             }
                         }
@@ -91,43 +100,57 @@ namespace myproject {
                             //Console.Write("name: " + names[i]);
                             //Console.Write("  gender: " + genders[i]);
                             //Console.WriteLine();
-                            if(genders[i]=="m"){
+                            if (genders[i] == "m") {
                                 males.Add(names[i]);
-                                }
-
-                            else if(genders[i]=="f"){
+                            } else if (genders[i] == "f") {
                                 females.Add(names[i]);
                             }
                         }
                         //Console.WriteLine("females:");
                         for (int i = 0; i < females.Count; i++) {
                             //Console.WriteLine(females[i]);
-                            
+
 
                         }
                         //Console.WriteLine();
+                      
+                        Console.WriteLine("Completed Processing Input..");
 
-                        //Console.WriteLine("males:");
-                        for (int i = 0; i < males.Count; i++) {
+                        //write to output file
 
-                            //run the matches calculator against all females.
-                            for(int j= 0; j<females.Count;j++){
+                        try {
+                            //Pass the filepath and filename to the StreamWriter Constructor
+                            StreamWriter sw = new StreamWriter("Output.txt");
+                            
+                            //Write the lines of text
+                            for (int i = 0; i < males.Count; i++) {
 
-                                produceOutput(males[i],females[j]);
+                                //run the matches calculator against all females.
+                                for (int j = 0; j < females.Count; j++) {
+
+                                    sw.WriteLine(produceOutput(males[i], females[j]));
+
+                                }
 
                             }
                             
+                            sw.Close();
+                            Console.WriteLine("Output Written To Output.txt! \n");
+                        } catch (Exception e) {
+                            Console.WriteLine("Exception: " + e.Message);
+                        } 
 
 
-
-                        }
-
-
-                        }
-
+                        
+                    
 
                     }
-                else {
+
+
+
+
+
+                } else {
                     Console.WriteLine("Please Enter A Valid Option!");
                 }
 
@@ -136,86 +159,94 @@ namespace myproject {
 
         }
         static string calculateMatch(string sentence) {
-                //create temp string
-                string temporary = sentence;
-                string occuranceString = "";
-                string sumString = "";
+            //create temp string
+            string temporary = sentence;
+            string occuranceString = "";
+            string sumString = "";
 
 
 
-                //loop as long as string has chars
-                while (temporary.Length > 0) {
+            //loop as long as string has chars
+            while (temporary.Length > 0) {
 
-                    //count occurance of each char
-                    char ch = temporary[0];
-                    int frequency = temporary.Count(f => (f == ch));
-                    //Console.WriteLine("frequency of:" + temporary[0] + " is " + frequency);
-                    occuranceString = occuranceString + frequency;
+                //count occurance of each char
+                char ch = temporary[0];
+                int frequency = temporary.Count(f => (f == ch));
+                //Console.WriteLine("frequency of:" + temporary[0] + " is " + frequency);
+                occuranceString = occuranceString + frequency;
 
 
-                    //remove current indice
-                    temporary = temporary.Replace(temporary[0].ToString(), String.Empty);
-
-                }
-
-                //Console.WriteLine("OccuranceString: " + occuranceString);
-                //use occurance string to calculate 2 digit number
-                sumString = produceSums(occuranceString);
-
-                //Console.WriteLine("The string of sums is: " + sumString);
-                //Console.WriteLine(name1+ " matches " +name2+ " "+ produceMatches(sumString)+ "%");
-
-                return produceMatches(sumString);
+                //remove current indice
+                temporary = temporary.Replace(temporary[0].ToString(), String.Empty);
 
             }
-        static void produceOutput(string fname, string lname) {
-                        string name1 = fname.ToLower();
-                        string name2 = lname.ToLower();
-                        string sentence = name1 + " matches " + name2;
-                        sentence = String.Concat(sentence.Where(c => !Char.IsWhiteSpace(c)));
-                        //calculate match percentage print results
-                        int percentage = Int32.Parse(calculateMatch(sentence));
 
-                        //check if % greater or less than 80
-                        if (percentage >= 80) {
-                            Console.WriteLine(fname + " matches " + lname + " " + percentage + "%, good match");
-                            Console.WriteLine();
-                        } else {
-                            Console.WriteLine(fname + " matches " + lname + " " + percentage + "%");
-                            Console.WriteLine();
-                        }
-                    }
+            //Console.WriteLine("OccuranceString: " + occuranceString);
+            //use occurance string to calculate 2 digit number
+            sumString = produceSums(occuranceString);
+
+            //Console.WriteLine("The string of sums is: " + sumString);
+            //Console.WriteLine(name1+ " matches " +name2+ " "+ produceMatches(sumString)+ "%");
+
+            return produceMatches(sumString);
+
+        }
+        static string produceOutput(string fname, string lname) {
+            string name1 = fname.ToLower();
+            string name2 = lname.ToLower();
+
+            string check = fname + lname;
+            bool result = check.All(Char.IsLetter);
+
+            if (!result) {
+                return("Input is invalid, Please Enter Valid Input!");
+            } 
+
+            string sentence = name1 + " matches " + name2;
+            sentence = String.Concat(sentence.Where(c => !Char.IsWhiteSpace(c)));
+            //calculate match percentage print results
+            int percentage = Int32.Parse(calculateMatch(sentence));
+
+            //check if % greater or less than 80
+            if (percentage >= 80) {
+                return (fname + " matches " + lname + " " + percentage + "%, good match \n");
+
+            } else {
+                return (fname + " matches " + lname + " " + percentage + "% \n");
+
+            }
+        }
 
         static string produceSums(string occuranceString) {
-                    string myString = "";
+            string myString = "";
 
-                    while (occuranceString.Length > 1) {
-                        int sum = 0;
-                        int left = (int) Char.GetNumericValue(occuranceString[0]);
-                        int right = (int) Char.GetNumericValue(occuranceString[occuranceString.Length - 1]);
-                        sum = left + right;
-                        myString = myString + "" + sum.ToString();
-                        occuranceString = occuranceString.Remove(0, 1);
-                        occuranceString = occuranceString.Remove((occuranceString.Length) - 1);
+            while (occuranceString.Length > 1) {
+                int sum = 0;
+                int left = (int) Char.GetNumericValue(occuranceString[0]);
+                int right = (int) Char.GetNumericValue(occuranceString[occuranceString.Length - 1]);
+                sum = left + right;
+                myString = myString + "" + sum.ToString();
+                occuranceString = occuranceString.Remove(0, 1);
+                occuranceString = occuranceString.Remove((occuranceString.Length) - 1);
 
 
-                        if (occuranceString.Length == 1) {
-                            myString = myString + "" + occuranceString;
+                if (occuranceString.Length == 1) {
+                    myString = myString + "" + occuranceString;
 
-                        }
-                    }
-
-                    return myString;
                 }
+            }
+
+            return myString;
+        }
 
         static string produceMatches(string sumString) {
-                    if (sumString.Length == 2) {
-                        return sumString;
-                    } else {
-                        return produceMatches(produceSums(sumString));
-                    }
+            if (sumString.Length == 2) {
+                return sumString;
+            } else {
+                return produceMatches(produceSums(sumString));
+            }
 
-                }
+        }
 
     }
 }
