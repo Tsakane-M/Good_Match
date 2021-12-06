@@ -46,23 +46,7 @@ namespace myproject {
 
                     produceOutput(fname, lname);
 
-                    static void produceOutput(string fname, string lname) {
-                        string name1 = fname.ToLower();
-                        string name2 = lname.ToLower();
-                        string sentence = name1 + " matches " + name2;
-                        sentence = String.Concat(sentence.Where(c => !Char.IsWhiteSpace(c)));
-                        //calculate match percentage print results
-                        int percentage = Int32.Parse(calculateMatch(sentence));
-
-                        //check if % greater or less than 80
-                        if (percentage >= 80) {
-                            Console.WriteLine(fname + " matches " + lname + " " + percentage + "%, good match");
-                            Console.WriteLine();
-                        } else {
-                            Console.WriteLine(fname + " matches " + lname + " " + percentage + "%");
-                            Console.WriteLine();
-                        }
-                    }
+                    
 
                 } else if (option == "3") {
                     System.Environment.Exit(0);
@@ -95,24 +79,63 @@ namespace myproject {
                                 }
                             }
                         }
+
+                        //create different lists of males and females
+                        List < string > males = new List < string > ();
+                        List < string > females = new List < string > ();
+
+
                         //print new without dublicates
                         for (int i = 0; i < names.Count; i++) {
 
-                            Console.Write("name: " + names[i]);
-                            Console.Write("  gender: " + genders[i]);
-                            Console.WriteLine();
+                            //Console.Write("name: " + names[i]);
+                            //Console.Write("  gender: " + genders[i]);
+                            //Console.WriteLine();
+                            if(genders[i]=="m"){
+                                males.Add(names[i]);
+                                }
+
+                            else if(genders[i]=="f"){
+                                females.Add(names[i]);
+                            }
                         }
+                        //Console.WriteLine("females:");
+                        for (int i = 0; i < females.Count; i++) {
+                            //Console.WriteLine(females[i]);
+                            
+
+                        }
+                        //Console.WriteLine();
+
+                        //Console.WriteLine("males:");
+                        for (int i = 0; i < males.Count; i++) {
+
+                            //run the matches calculator against all females.
+                            for(int j= 0; j<females.Count;j++){
+
+                                produceOutput(males[i],females[j]);
+
+                            }
+                            
+
+
+
+                        }
+
+
+                        }
+
+
                     }
-                } else {
+                else {
                     Console.WriteLine("Please Enter A Valid Option!");
                 }
 
 
             }
 
-
-
-            static string calculateMatch(string sentence) {
+        }
+        static string calculateMatch(string sentence) {
                 //create temp string
                 string temporary = sentence;
                 string occuranceString = "";
@@ -133,9 +156,6 @@ namespace myproject {
                     //remove current indice
                     temporary = temporary.Replace(temporary[0].ToString(), String.Empty);
 
-
-
-
                 }
 
                 //Console.WriteLine("OccuranceString: " + occuranceString);
@@ -145,10 +165,28 @@ namespace myproject {
                 //Console.WriteLine("The string of sums is: " + sumString);
                 //Console.WriteLine(name1+ " matches " +name2+ " "+ produceMatches(sumString)+ "%");
 
+                return produceMatches(sumString);
 
+            }
+        static void produceOutput(string fname, string lname) {
+                        string name1 = fname.ToLower();
+                        string name2 = lname.ToLower();
+                        string sentence = name1 + " matches " + name2;
+                        sentence = String.Concat(sentence.Where(c => !Char.IsWhiteSpace(c)));
+                        //calculate match percentage print results
+                        int percentage = Int32.Parse(calculateMatch(sentence));
 
+                        //check if % greater or less than 80
+                        if (percentage >= 80) {
+                            Console.WriteLine(fname + " matches " + lname + " " + percentage + "%, good match");
+                            Console.WriteLine();
+                        } else {
+                            Console.WriteLine(fname + " matches " + lname + " " + percentage + "%");
+                            Console.WriteLine();
+                        }
+                    }
 
-                static string produceSums(string occuranceString) {
+        static string produceSums(string occuranceString) {
                     string myString = "";
 
                     while (occuranceString.Length > 1) {
@@ -170,7 +208,7 @@ namespace myproject {
                     return myString;
                 }
 
-                static string produceMatches(string sumString) {
+        static string produceMatches(string sumString) {
                     if (sumString.Length == 2) {
                         return sumString;
                     } else {
@@ -178,13 +216,6 @@ namespace myproject {
                     }
 
                 }
-
-                return produceMatches(sumString);
-
-            }
-
-
-        }
 
     }
 }
