@@ -25,6 +25,8 @@ namespace myproject {
                 Console.Write(":");
                 option = Console.ReadLine();
 
+                //cater for different console options
+
                 if (option == "1") {
 
                     while (true) {
@@ -140,14 +142,7 @@ namespace myproject {
                             Console.WriteLine("Exception: " + e.Message);
                         } 
 
-
-                        
-                    
-
                     }
-
-
-
 
 
                 } else {
@@ -181,12 +176,8 @@ namespace myproject {
 
             }
 
-            //Console.WriteLine("OccuranceString: " + occuranceString);
-            //use occurance string to calculate 2 digit number
+      
             sumString = produceSums(occuranceString);
-
-            //Console.WriteLine("The string of sums is: " + sumString);
-            //Console.WriteLine(name1+ " matches " +name2+ " "+ produceMatches(sumString)+ "%");
 
             return produceMatches(sumString);
 
