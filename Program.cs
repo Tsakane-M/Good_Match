@@ -13,35 +13,91 @@ namespace myproject
             //obtain and process/handle user input
             string fname = "";
             string lname = "";
+            string option="";
 
-            Console.Write("Enter the first name: ");
-            fname = Console.ReadLine();
-            string name1= fname;
-            fname = fname.ToLower();
-           
+            while(true){
 
-            Console.Write("Enter the second name: ");
-            lname = Console.ReadLine();
-            string name2= lname;
-            lname = lname.ToLower();
+                Console.WriteLine("WELCOME TO MATCH CALCULATOR");
+                Console.WriteLine("............................");
+                Console.WriteLine("CHOOSE YOUR OPTION AND PRESS ENTER!");
+                Console.WriteLine("OPTION 1: ENTER 1 TO ENTER TWO STRINGS AND GET THEIR MATCH PERCENTAGE!" );
+                Console.WriteLine("OPTION 2: ENTER 2 TO ENTER THE CSV FILENAME AND MATCH MANY NAMES!" );
+                Console.WriteLine("OPTION 3: ENTER 3 TO QUIT!" );
+                Console.Write(":");
+                option=Console.ReadLine();
 
-            //calculate match percentage print results
-            int percentage=Int32.Parse( calculateMatch(fname + " matches" + lname));
+                if(option=="1"){
 
-            //check if % greater or less than 80
-            if(percentage>=80){
-                Console.WriteLine(name1+ " matches " +name2+ " "+percentage+ "%, good match");
+                    while(true){
+                        Console.Write("Enter the first name: ");
+                        fname = Console.ReadLine();
+
+                        Console.Write("Enter the second name: ");
+                        lname = Console.ReadLine();
+
+                        string check = fname + lname;
+                        bool result = check.All(Char.IsLetter);
+
+                        if(!result){
+                            Console.WriteLine("Please Enter Valid Input!");
+                            Console.WriteLine();
+                            continue;
+                        }
+                        else{
+                            break;
+                        }  
+                }
+                string name1= fname.ToLower();
+                string name2= lname.ToLower();
+                string sentence = name1 +" matches "+name2;
+                sentence = String.Concat(sentence.Where(c => !Char.IsWhiteSpace(c)));
+                //calculate match percentage print results
+                int percentage=Int32.Parse( calculateMatch(sentence));
+
+                //check if % greater or less than 80
+                if(percentage>=80){
+                    Console.WriteLine(fname+ " matches " +lname+ " "+percentage+ "%, good match");
+                    Console.WriteLine();
+                }
+                else{
+                    Console.WriteLine(fname+ " matches " +lname+ " "+percentage+ "%");
+                    Console.WriteLine();
+                    }
+                }
+                else if(option=="3"){
+                    System.Environment.Exit(0);  
+                }
+                
+                else if(option=="2"){
+                     using(var reader = new StreamReader(@"test.csv"))
+                        {
+                            List<string> listA = new List<string>();
+                            List<string> listB = new List<string>();
+                            while (!reader.EndOfStream)
+                            {
+                                var line = reader.ReadLine();
+                                Console.WriteLine(line);
+                                var values = line.Split(',');
+
+                                listA.Add(values[0]);
+                                listB.Add(values[1]);
+                            }
+                        }
+                    }
+
+                else{
+                    Console.WriteLine("Please Enter A Valid Option!");
+                }
+
+       
             }
-            else{
-                Console.WriteLine(name1+ " matches " +name2+ " "+percentage+ "%");
-            }
-        }
+            
+            
 
         static string calculateMatch(string sentence)
         {
             //create temp string
-            string temp = sentence;
-            string temporary = String.Concat(temp.Where(c => !Char.IsWhiteSpace(c)));
+            string temporary = sentence;
             string occuranceString = "";
             string sumString = "";
 
@@ -112,10 +168,7 @@ namespace myproject
                     return produceMatches(produceSums(sumString));
                 }
 
-
-
             }
-
             return produceMatches(sumString);
 
         }
@@ -123,7 +176,7 @@ namespace myproject
 
     }
 
-}
+    }}
 
 
 
