@@ -212,7 +212,7 @@ namespace myproject {
                 return (fname + " matches " + lname + " " + percentage + "%, good match \n");
 
             } else {
-                return (fname + " matches " + lname + " " + percentage + "% \n");
+                return (fname + " matches " + lname + " " + percentage + " % \n");
 
             }
         }
